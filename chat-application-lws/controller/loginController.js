@@ -7,12 +7,12 @@ const createError = require("http-errors");
 const User = require("../models/People");
 
 // get login page
-const getLogin = (req, res, next) => {
+function getLogin(req, res, next) {
   res.render("index");
 }
 
 // do login
-const login = async (req, res, next) => {
+async function login(req, res, next) {
   try {
     // find a user who has this email/username
     const user = await User.findOne({
@@ -28,10 +28,11 @@ const login = async (req, res, next) => {
       if (isValidPassword) {
         // prepare the user object to generate token
         const userObject = {
+          userid: user._id,
           username: user.name,
-          mobile: user.mobile,
           email: user.email,
-          role: "user",
+          avatar: user.avatar || null,
+          role: user.role || "user",
         };
 
         // generate token
@@ -49,7 +50,7 @@ const login = async (req, res, next) => {
         // set logged in user local identifier
         res.locals.loggedInUser = userObject;
 
-        res.render("inbox");
+        res.redirect("inbox");
       } else {
         throw createError("Login failed! Please try again.");
       }
@@ -71,7 +72,7 @@ const login = async (req, res, next) => {
 }
 
 // do logout
-const logout = (req, res) => {
+function logout(req, res) {
   res.clearCookie(process.env.COOKIE_NAME);
   res.send("logged out");
 }

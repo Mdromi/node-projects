@@ -3,10 +3,12 @@
 
 // external imports
 require('dotenv').config();
+const http = require("http");
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const moment = require("moment");
 
 // internal imports
 const {notFoundHandler, errorHandler} = require("./middleware/common/errorHandler");
@@ -15,10 +17,18 @@ const userRouter = require('./router/userRouter');
 const inboxRouter = require('./router/inboxRouter');
 
 const app = express();
+const server = http.createServer(app)
 
 // request process 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// socket creation
+const io = require("socket.io")(server);
+global.io = io;
+
+// set comment as app locals
+app.locals.moment = moment;
 
 // Setup View engine
 app.set('view engine', 'ejs');
