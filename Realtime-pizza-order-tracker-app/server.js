@@ -13,9 +13,10 @@ app.set('view engine', 'ejs')
 app.use(expressLayouts) 
 app.set('views', viewsPath)
 app.use(express.static(__dirname + '/public'));
+// app.set("layout extractScripts", true)
 
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('home',  { layout: false })
 })
 
 
