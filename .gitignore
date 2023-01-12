@@ -10,6 +10,7 @@ lerna-debug.log*
 # Projects File 
 scss-cpy.scss
 .env
+fake-server.js
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
