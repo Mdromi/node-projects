@@ -5,10 +5,11 @@ var expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const session = require("express-session");
 const flash = require("express-flash");
-// const MongoStore = require("connect-mongo")
-const MongoStore = require('connect-mongodb-session')(session);
+const MongoStore = require("connect-mongo");
+// const MongoStore = require("connect-mongodb-session")(session);
 
 const app = express();
+app.enable('trust proxy');
 const MONGODB_URI = `mongodb://localhost:27017/realtime-pizza-order`;
 
 // Set Template engine
@@ -18,53 +19,9 @@ app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("views", viewsPath);
 app.use(express.static(__dirname + "/public"));
+app.use(express.json())
 
 require("./routes/web")(app);
-
-// Session store
-// const store = new MongoStore({
-//     mongooseConnection: mongoose.connection,
-//     uri: MONGODB_URI ,
-//     collection:'sessions'
-// })
-
-// //express middleware
-// app.use(session({
-//     secret: process.env.COOKIE_SECRET,
-//     resave: false,
-//     saveUnitialized: false,
-//     store: store,
-//     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-// }))
-
-// let mongoStore = new MongoStore({
-//   mongooseConnection: mongoose.connection,
-//   collection: "sessions",
-// });
-
-// // Session config
-// app.use(
-//   session({
-//     secret: process.env.COOKIE_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     store: mongoStore,
-//     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-//   })
-// );
-
-// Session store
-let mongoStore = new MongoStore({
-	mongooseConnection: mongoose.connection,
-	collection: 'sessions'
-});
-app.use(session({
-	secret: process.env.COOKIE_SECRET,
-	resave: false,
-	saveUninitialized: false,
-	store: mongoStore,
-  cookie: { maxAge: 1000 * 60 * 60 * 24 }
-}));
 
 app.use(flash());
 
@@ -85,3 +42,20 @@ mongoose
   .catch((e) => {
     return console.log(e);
   });
+
+// Session store
+
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    store: MongoStore.create({
+      mongoUrl: MONGODB_URI
+    }),
+    saveUninitialized: false,
+    maxAge: 1000 * 60 * 60 * 24,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    },
+  })
+);
