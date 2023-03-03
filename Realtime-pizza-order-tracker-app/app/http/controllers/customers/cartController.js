@@ -4,7 +4,6 @@ function cartController() {
       res.render("customers/cart");
     },
     update(req, res) {
-      console.log(req);
       // for the first time creating cart and adding basic object structure
       if (!req.session.cart) {
         req.session.cart = {
