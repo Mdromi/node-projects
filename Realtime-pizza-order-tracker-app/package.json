@@ -12,6 +12,7 @@
     "production": "mix --production"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^1.48.0",
     "axios": "^1.2.2",
     "bcrypt": "^5.1.0",
     "connect-mongo": "^4.6.0",
