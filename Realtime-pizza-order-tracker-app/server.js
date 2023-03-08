@@ -11,7 +11,7 @@ const Emitter = require('events')
 
 const app = express();
 app.enable("trust proxy");
-const MONGODB_URI = `mongodb://localhost:27017/realtime-pizza-order`;
+const MONGODB_URI = process.env.MONGO_CONNECTION_URL;
 
 // Event emitter
 const eventEmitter = new Emitter();
@@ -59,6 +59,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 require("./routes/web")(app);
+app.use((req, res) => {
+  res.status(404).render('errors/404')
+})
 
 
 // Database Connection
