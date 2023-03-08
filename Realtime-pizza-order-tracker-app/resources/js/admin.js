@@ -1,7 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 
-export function initAdmin(socket) {
+export const initAdmin = (socket) => {
     const orderTableBody = document.querySelector('#orderTableBody')
     let orders = []
     let markup
@@ -18,7 +18,7 @@ export function initAdmin(socket) {
         console.log(err)
     })
 
-    function renderItems(items) {
+    const renderItems = (items) => {
         let parsedItems = Object.values(items)
         return parsedItems.map((menuItem) => {
             return `
@@ -27,7 +27,7 @@ export function initAdmin(socket) {
         }).join('')
       }
 
-    function generateMarkup(orders) {
+    const generateMarkup = (orders) => {
         return orders.map(order => {
             return `
                 <tr>
@@ -66,7 +66,7 @@ export function initAdmin(socket) {
                                     d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
                         </div>
-                    </div>
+                    </div> 
                 </td>
                 <td class="border px-4 py-2">
                     ${ moment(order.createdAt).format('hh:mm A') }

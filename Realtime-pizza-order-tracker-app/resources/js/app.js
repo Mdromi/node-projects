@@ -84,6 +84,5 @@ socket.on("orderUpdated", (data) => {
   const updateOrder = { ...order };
   updateOrder.updatedAt = moment().format();
   updateOrder.status = data.status;
-  console.log(order);
   updateStatus(updateOrder);
 });
