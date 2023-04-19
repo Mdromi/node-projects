@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const tasks = require("./routes/tasks");
-// const notFound = require('./middleware/not-found');
-// const errorHandlerMiddleware = require('./middleware/error-handler');
+const notFound = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
 const connectDB = require('./db/connect')
 require('dotenv').config();
 
@@ -22,8 +22,8 @@ app.get("/health", (_req, res) => {
 });
 app.use('/api/v1/tasks', tasks);
 
-// app.use(notFound);
-// app.use(errorHandlerMiddleware);
+ app.use(notFound);
+ app.use(errorHandlerMiddleware);
 
 
 // create server and connect db
